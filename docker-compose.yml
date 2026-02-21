@@ -1,0 +1,59 @@
+services:
+  # Backend (Laravel)
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: os-api
+    volumes:
+      - ./backend:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - os-network
+
+  # Frontend (React)
+  web:
+    image: node:20-alpine
+    container_name: os-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"
+    networks:
+      - os-network
+
+  # Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: os-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: os_database
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - os-db-data:/var/lib/mysql
+    networks:
+      - os-network
+
+  # MailHog - Adicionei a porta 1025 para o Laravel conseguir enviar
+  mailhog:
+    image: mailhog/mailhog
+    container_name: os-mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - os-network
+
+# Definição dos volumes globais
+volumes:
+  os-db-data:
+  
+networks:
+  os-network:
+    driver: bridge

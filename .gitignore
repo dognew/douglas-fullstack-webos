@@ -1,0 +1,17 @@
+# Dependências
+node_modules/
+backend/vendor/
+
+# Configurações de Ambiente (Segredos)
+.env
+backend/.env
+
+# Banco de Dados e Logs
+os-db-data/
+*.log
+backend/storage/*.key
+
+# IDE e Sistema
+.vscode/
+.idea/
+.DS_Store
