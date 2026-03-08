@@ -4,9 +4,11 @@ export default function BiosScreen({ onComplete }: { onComplete: () => void }) {
   const [specs, setSpecs] = useState<any>(null);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/boot-specs')
+
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    fetch(`${apiUrl}/boot-specs`)
       .then(res => {
-        // Se a resposta não for OK (ex: 404), força a ida para o .catch
         if (!res.ok) throw new Error("Erro na API");
         return res.json();
       })
